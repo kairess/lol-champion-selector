@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="kairess">
+
+    <title>LoL Champion Selector</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <link rel="stylesheet" href="cover.css" type="text/css" />
+    <link rel="stylesheet" href="style.css" type="text/css" />
+
+    <link rel="stylesheet" href="dist/jquery.slotmachine.css" type="text/css" media="screen" />
+
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="dist/jquery.slotmachine.js"></script>
+  </head>
+
+  <body>
+
+    <div class="site-wrapper">
+
+      <div class="site-wrapper-inner">
+
+        <div class="cover-container">
+
+          <!--<div class="masthead clearfix">
+            <div class="inner">
+              <h3 class="masthead-brand">Cover</h3>
+              <nav class="nav nav-masthead">
+                <a class="nav-link active" href="#">Home</a>
+                <a class="nav-link" href="#">Features</a>
+                <a class="nav-link" href="#">Contact</a>
+              </nav>
+            </div>
+          </div>-->
+
+          <div class="inner cover">
+            <!--<h1 class="cover-heading">Select Your Champion</h1>-->
+
+            <p class="lead">
+                <div id="champions"></div>
+            </p>
+            
+            <p class="lead">
+              <a href="#" id="btn-shuffle" class="btn btn-lg btn-secondary" style="opacity: 0;">Shuffle</a>
+            </p>
+          </div>
+
+          <div class="mastfoot">
+            <div class="inner">
+              <p>LoL Champion Selector by <a href="https://github.com/kairess">kairess</a></p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <script>
+    var machine;
+
+    function shuffle(a) {
+        var j, x, i;
+        for (i = a.length; i; i--) {
+            j = Math.floor(Math.random() * i);
+            x = a[i - 1];
+            a[i - 1] = a[j];
+            a[j] = x;
+        }
+    }
+
+    $(function() {
+        $.getJSON('https://raw.githubusercontent.com/ngryman/lol-champions/master/champions.json', function(data) {
+            shuffle(data);
+
+            $.each(data, function(i, champ) {
+                console.log(champ);
+                var champHtml = '<div class="text-center"><img src="'+champ.icon+'" /><div>'+champ.name+' <span class="badge"></span></div></div>';
+
+                $('#champions').append(champHtml);
+            });
+
+            setTimeout(function() {
+                machine = $("#champions").slotMachine({
+                    active	: 0,
+                    delay	: 4000,
+                });
+
+                $('#btn-shuffle').css({opacity: 1});
+            }, 500);
+        });
+
+        $('#btn-shuffle').click(function(e) {
+            e.preventDefault();
+            
+            if(!machine.running) {
+                $('#btn-shuffle').css({opacity: 0});
+                machine.stop();
+
+                machine.shuffle(0, function() {
+                    $('#btn-shuffle').css({opacity: 1});
+                });
+            }
+        });
+    });
+    </script>
+
+  </body>
+</html>
+
+
+
+
+
